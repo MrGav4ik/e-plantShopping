@@ -7,7 +7,6 @@ import { addItem } from './CartSlice';
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
     const [showPlants, setShowPlants] = useState(false);
-    const [disabledProducts, setDisabledProducts] = useState([]);
     const dispatch = useDispatch();
 
     const plantsArray = [
@@ -251,19 +250,26 @@ const handlePlantsClick = (e) => {
     e.preventDefault();
     setShowCart(false);
   };
+  const [disabledProducts, setDisabledProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState({});
   const handleAddToCart = (product, productIndex) => {
     dispatch(addItem(product));
-    if (!disabledProducts.includes(productIndex)) {
-        setDisabledProducts(prev => [...prev, productIndex]);
-      }
-    console.log(productIndex);
+    if (!disabledProducts.includes({[productIndex] : true})) {
+        setDisabledProducts(prev => [...prev, { [productIndex] : true } ])
+    }
+    console.log(disabledProducts);
     setAddedToCart((prevState) => ({
         ...prevState,
         [product.name]: true,
     }));
  };
-   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+ const handleEnableButton = (productIndex) => {
+    if(disabledProducts.includes(productIndex)) {
+
+    };
+ }
+
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
     return (
         <div>
@@ -298,11 +304,15 @@ const handlePlantsClick = (e) => {
                         <div className="product-price">{plant.cost}</div>
                         <div className="product-description">{plant.description}</div>
                         <button
-                            key={plantIndex} // Ensure key is unique for each button
-                            className={`product-button ${disabledProducts.includes(plantIndex) ? 'disabled' : ''}`}
+                            key={plantIndex}
+                            className={`product-button ${disabledProducts.includes({[plantIndex] : true}) ? 'disabled' : ''}`}
                             onClick={() => handleAddToCart(plant, plantIndex)}
-                            disabled={disabledProducts.includes(plantIndex)}>
-                            {disabledProducts.includes(plantIndex) ? 'Added to Cart' : 'Add to Cart'}
+                            disabled={disabledProducts.includes({[plantIndex] : true})}>
+                            {disabledProducts.includes({plantIndex : true}) ? 'Added To Cart' : 'Add To Cart'}
+                        </button>
+                        <button
+                        onClick={() => handleEnableButton(plantIndex)}>
+                            Enable
                         </button>
                     </div>
                     ))}

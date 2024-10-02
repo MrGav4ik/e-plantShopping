@@ -37,6 +37,9 @@ const CartItem = ({ onContinueShopping }) => {
   const handleRemove = (item) => {
     console.log(item);
     dispatch(removeItem(item.name));
+    if (disabledProducts.includes(productIndex)) {
+        setDisabledProducts(prev => [...prev, productIndex]);
+      }
   };
 
   // Calculate total cost based on quantity for an item
