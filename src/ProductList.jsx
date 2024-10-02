@@ -302,7 +302,7 @@ const handlePlantsClick = (e) => {
                             className={`product-button ${disabledProducts.includes(plantIndex) ? 'disabled' : ''}`}
                             onClick={() => handleAddToCart(plant, plantIndex)}
                             disabled={disabledProducts.includes(plantIndex)}>
-                            {disabledProducts.includes(plantIndex) ? 'Disabled' : 'Add to Cart'}
+                            {disabledProducts.includes(plantIndex) ? 'Added to Cart' : 'Add to Cart'}
                         </button>
                     </div>
                     ))}
