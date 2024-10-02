@@ -38,6 +38,12 @@ body {
     text-decoration: none;
    
 }
+.cart-count {
+    position: absolute;
+    top: 33px;
+    right: 40px;
+    font-size: 30px;
+}
 
 /* Product Grid */
 .product-grid {
