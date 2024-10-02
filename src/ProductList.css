@@ -110,7 +110,14 @@ body {
     transition: background-color 0.3s ease-in-out;
     margin-top: 10px;
 }
-
+.product-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.product-button.disabled:hover {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
 .product-button:hover {
     background-color: #c0392b;
 }
