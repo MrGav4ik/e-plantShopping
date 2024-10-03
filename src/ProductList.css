@@ -46,6 +46,11 @@ body {
 }
 
 /* Product Grid */
+.product-grid h1 {
+    background-color: #45a049;
+    margin-bottom: 1vw;;
+}
+
 .product-grid {
     display:flex;
     flex-direction: column;

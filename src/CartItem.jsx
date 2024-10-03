@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, updateQuantity, increaseItemQuantity, decreaseItemQuantity } from './CartSlice';
+import { removeItem, updateQuantity, increaseItemQuantity, decreaseItemQuantity, enableItem } from './CartSlice';
 import './CartItem.css';
+import { handleEnableButton } from './ProductList';
 
 const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
@@ -35,11 +36,8 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const handleRemove = (item) => {
-    console.log(item);
     dispatch(removeItem(item.name));
-    if (disabledProducts.includes(productIndex)) {
-        setDisabledProducts(prev => [...prev, productIndex]);
-      }
+    dispatch(enableItem(item.name));
   };
 
   // Calculate total cost based on quantity for an item

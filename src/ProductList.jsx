@@ -3,11 +3,12 @@ import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import './ProductList.css'
 import CartItem from './CartItem';
-import { addItem } from './CartSlice';
+import { addItem, enableItem, disableItem } from './CartSlice';
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
     const [showPlants, setShowPlants] = useState(false);
     const dispatch = useDispatch();
+    const disabledProducts = useSelector(state => state.cart.disabledProducts);
 
     const plantsArray = [
         {
@@ -250,25 +251,15 @@ const handlePlantsClick = (e) => {
     e.preventDefault();
     setShowCart(false);
   };
-  const [disabledProducts, setDisabledProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState({});
   const handleAddToCart = (product, productIndex) => {
     dispatch(addItem(product));
-    if (!disabledProducts.includes({[productIndex] : true})) {
-        setDisabledProducts(prev => [...prev, { [productIndex] : true } ])
-    }
-    console.log(disabledProducts);
-    setAddedToCart((prevState) => ({
-        ...prevState,
-        [product.name]: true,
-    }));
- };
- const handleEnableButton = (productIndex) => {
-    if(disabledProducts.includes(productIndex)) {
+    dispatch(disableItem(product.name));
+  };
+    const handleEnableButton = (plant) => {
+        dispatch(enableItem(plant));
 
-    };
- }
-
+    };      
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
     return (
@@ -279,7 +270,7 @@ const handlePlantsClick = (e) => {
                <img src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png" alt="" />
                <a href="/" style={{textDecoration:'none'}}>
                         <div>
-                    <h3 style={{color:'white'}}>Paradise Nursery</h3>
+                    <h3 style={{color:'white'}}>Garden of Eden Plants</h3>
                     <i style={{color:'white'}}>Where Green Meets Serenity</i>
                     </div>
                     </a>
@@ -304,15 +295,11 @@ const handlePlantsClick = (e) => {
                         <div className="product-price">{plant.cost}</div>
                         <div className="product-description">{plant.description}</div>
                         <button
-                            key={plantIndex}
-                            className={`product-button ${disabledProducts.includes({[plantIndex] : true}) ? 'disabled' : ''}`}
-                            onClick={() => handleAddToCart(plant, plantIndex)}
-                            disabled={disabledProducts.includes({[plantIndex] : true})}>
-                            {disabledProducts.includes({plantIndex : true}) ? 'Added To Cart' : 'Add To Cart'}
-                        </button>
-                        <button
-                        onClick={() => handleEnableButton(plantIndex)}>
-                            Enable
+                            key={plant.name}
+                            className={`product-button ${disabledProducts.some(product => product[plant.name] === true) ? 'disabled' : ''}`}
+                            onClick={() => handleAddToCart(plant, plant.name)}
+                            disabled={disabledProducts.some(product => product[plant.name] === true)}>
+                            {disabledProducts.some(product => product[plant.name] === true) ? 'Added To Cart' : 'Add To Cart'}
                         </button>
                     </div>
                     ))}
@@ -326,5 +313,7 @@ const handlePlantsClick = (e) => {
     </div>
     );
 }
+
+export const { disabledProducts } = ProductList;
 
 export default ProductList;
